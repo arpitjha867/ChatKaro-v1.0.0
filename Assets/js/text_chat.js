@@ -1,0 +1,1 @@
+console.log("in text_chat");
