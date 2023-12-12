@@ -18,7 +18,7 @@ const init = async () => {
     createOffer();
 
 }
-// init();
+init();
 
 let socket = io.connect();
 
@@ -32,12 +32,13 @@ socket.on("connect",()=>{
 })
 
 let servers = {
-    iceServers : [
+    iceServers: [
         {
-            urls : ["stun1.l.google.com:19302","stun2.l.google.com:19302","stun3.l.google.com:19302"]
+            urls: ["stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302", "stun:stun3.l.google.com:19302"]
         }
     ]
 }
+
 
 let createPeerConnection = async () => {
     peerConnection = new RTCPeerConnection(servers);
@@ -69,7 +70,8 @@ let createPeerConnection = async () => {
 }
 
 let createOffer = async () =>{
-    peerConnection = new RTCPeerConnection(servers)
+    createPeerConnection()
+    // peerConnection = new RTCPeerConnection(servers)
     let offer = await peerConnection.createOffer()
     await peerConnection.setLocalDescription(offer);
     socket.emit("offerSentToRemote",{
@@ -80,8 +82,9 @@ let createOffer = async () =>{
 }
 
 let createAnswer = async (data) =>{
+    createPeerConnection()
     remoteUser = data.username
-    peerConnection = new RTCPeerConnection(servers)
+    // peerConnection = new RTCPeerConnection(servers)
     await peerConnection.setRemoteDescription(data.offer)
     let answer = await peerConnection.createAnswer();
     await peerConnection.setLocalDescription(answer)

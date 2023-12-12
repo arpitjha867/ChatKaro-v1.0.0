@@ -49,19 +49,17 @@ io.on("connection",(socket)=>{
         console.log("user count : ",userCount);
     })
     socket.on("offerSentToRemote",(data)=>{
-        var offerReceiver = userConnection.find((o)=>{
-            o.user_id === data.remote_user
-        })
+        var offerReceiver = userConnection.find((o)=> o.user_id === data.remoteUser)
         if(offerReceiver){
             // console.log("offerReceiver user is : ",offerReceiver.connectionId);
             socket.to(offerReceiver.connectionId).emit("RecieverOffer",data);
         }
     })
     socket.on("answerSentToUser1",(data)=>{
-        var answerReceiver = userConnection.find((o)=>o.user_id === data.receiver); 
+        var answerReceiver = userConnection.find((o) => o.user_id === data.receiver); 
         if(answerReceiver){
             // console.log("answer receiver user : ",answerReceiver.connectionId);
-            socket.to(offerReceiver.connectionId).emit("ReceiveAnswer",data);
+            socket.to(answerReceiver.connectionId).emit("ReceiveAnswer",data);
         }
     })
     socket.on("candidateSentToUser",(data)=>{
