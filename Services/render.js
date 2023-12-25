@@ -1,5 +1,8 @@
+import generateName  from 'sillyname';
+import {onlineUsers} from '../server.js'
+
 export const homeRoutes = (req,res) => {
-    res.render("index");
+    res.render("index",{onlineUsers : onlineUsers.length});
 }
 
 export const textChatRouters = (req,res) => {
@@ -7,5 +10,6 @@ export const textChatRouters = (req,res) => {
 }
 
 export const videoChatRouters = (req,res) => {
-    res.render("video_chat");
+    let randomName = generateName();
+    res.render("video_chat",{name : randomName});
 }
