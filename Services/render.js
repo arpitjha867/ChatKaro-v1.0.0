@@ -6,10 +6,6 @@ export const homeRoutes = (req,res) => {
 }
 
 export const textChatRouters = (req,res) => {
-    res.render("text_chat");
-}
-
-export const videoChatRouters = (req,res) => {
     let randomName = generateName();
-    res.render("video_chat",{name : randomName});
+    res.render("text_chat",{name : randomName});
 }

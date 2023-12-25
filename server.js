@@ -5,6 +5,7 @@ import routes from "./Routes/router.js"
 import bodyparser from 'body-parser'
 import {Server}  from 'socket.io';
 import uniqueID from 'uniqid';
+import { Socket } from "dgram";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -34,23 +35,28 @@ var rooms = [];
 var queue = [];
 
 io.on("connection",(socket)=>{
+    console.log("****************NEW CONNECTION******************")
     let windowID = socket;
     socket.emit('wait', { "message": "Please wait...connecting you to stranger!"});
+    console.log("USER CONNECTED TO CONNECTION AND 'wait' EVENT IS SENT USERID => ",socket.id)
     availableUsers.push(socket);
     let resolveAfter5Seconds = () => {
-        return new Promise(resolve => {
-          setTimeout(() => {
-            resolve('resolved');
-          }, 5000);
-        });
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve('resolved');
+        }, 5000);
+      });
     }
+    console.log("USER ADDED TO 'availableUsers' LIST");
     async function asyncCall(){
         let result = await resolveAfter5Seconds();
         let selected = Math.floor(Math.random()*availableUsers.length);
         socket = availableUsers[selected];
+        console.log("RANDOMLY SELECTING USER FROM 'availableUsers' LIST USER SELECTED => ",socket.id);
         availableUsers.splice(selected,1);
         socket.emit('ack', { id: socket.id, msg: "User connected" });
         onlineUsers.push(socket);
+        console.log("SELECTED USER IS ADDED TO 'onlineUsers' LIST 'ack' EVENT IS SENT ")
         socket.on('privateRoom', (user) => {
             let unfilledRooms = rooms.filter((room) => {
               if (!room.isFilled) {
@@ -58,6 +64,7 @@ io.on("connection",(socket)=>{
               }
             });
             try {
+              console.log("CHECKING IF ROOM EXIST");
               socket.join(unfilledRooms[0].roomID);
               let index = rooms.indexOf(unfilledRooms[0]);
               rooms[index].isFilled = true;
@@ -65,26 +72,18 @@ io.on("connection",(socket)=>{
               socket.emit('private ack', { "message": "Added to privateRoom", "roomID": unfilledRooms[0].roomID });
               socket.roomID = unfilledRooms[0].roomID;
               io.sockets.in(socket.roomID).emit('toast', { "message": "You are connected with a stranger!"});
+              console.log("USER CONNECTED TO EXISTING ROOM 'private ack' EVENT SENT : ROOMID => ",socket.roomID);
             }
             catch(e) {
+              console.log("CREATING A NEW ROOM");
               let uID = uniqueID();
               rooms.push({ "roomID": uID, "isFilled": false });
               socket.join(uID);
               socket.roomID = uID;
               socket.emit('private ack', { "message": "Added to privateRoom", "roomID": uID });
+              console.log("ROOM CREATED  'private ack' EVENT SENT : ROOMID => ",uID);
             }
-                  // Update this part to handle WebRTC signaling
-      socket.on('offer', (offer) => {
-        socket.to(socket.roomID).emit('offer', offer);
-      });
-
-      socket.on('answer', (answer) => {
-        socket.to(socket.roomID).emit('answer', answer);
-      });
-
-      socket.on('ice-candidate', (candidate) => {
-        io.to(data.roomID).emit('ice-candidate', { candidate: data.candidate, roomID: data.roomID });
-      });
+            console.log("ALL ROOMS => ",rooms);
           });
     }
     asyncCall()
@@ -105,54 +104,3 @@ io.on("connection",(socket)=>{
         }
     });
 })
-
-// const io = new Server(server,{
-//   allowEIO3 : true
-// });
-
-// var userConnection = [];
-
-// io.on("connection",(socket)=>{
-//   // console.log("Socket id is : ",socket.id)
-//   socket.on("userconnect",(data)=>{
-//       // console.log("logged in user : ",data.displayName);
-//       userConnection.push({
-//           connectionId : socket.id,
-//           user_id: data.displayName
-//       })
-//       // get how many users are connected to our application
-//       console.log(userConnection)
-//       var userCount = userConnection.length;
-//       console.log("user count : ",userCount);
-//   })
-//   socket.on("offerSentToRemote",(data)=>{
-//       var offerReceiver = userConnection.find((o)=> o.user_id === data.remoteUser)
-//       if(offerReceiver){
-//           // console.log("offerReceiver user is : ",offerReceiver.connectionId);
-//           socket.to(offerReceiver.connectionId).emit("RecieverOffer",data);
-//       }
-//   })
-//   socket.on("answerSentToUser1",(data)=>{
-//       var answerReceiver = userConnection.find((o) => o.user_id === data.receiver); 
-//       if(answerReceiver){
-//           // console.log("answer receiver user : ",answerReceiver.connectionId);
-//           socket.to(answerReceiver.connectionId).emit("ReceiveAnswer",data);
-//       }
-//   })
-//   socket.on("candidateSentToUser",(data)=>{
-//       var candidateReceiver = userConnection.find((o)=>o.user_id === data.remoteUser); 
-//       if(candidateReceiver){
-//           // console.log("candidateReceiver  user : ",candidateReceiver.connectionId);
-//           socket.to(candidateReceiver.connectionId).emit("candidateReceiver",data);
-//       }
-//   })
-
-//   socket.on("disconnect",()=>{
-//       // console.log("user disconnected");
-//       var disUser = userConnection.find(p=>p.connectionId = socket.id)
-//       if(disUser){
-//           userConnection = userConnection.filter(p => p.connectionId != socket.id);
-//       }
-//   })
-
-// })
