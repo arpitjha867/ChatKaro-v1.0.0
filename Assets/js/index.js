@@ -44,11 +44,11 @@ let remoteStream;
 
     socket.on('private ack', (data) => {
         room_id_of_other_user = data.roomID;
-        console.log(data.roomID);
+        console.log("USER IS CONNECTED TO EXISTING ROOM OR CREATED A NEW ROOM ROOMID => ",room_id_of_other_user);
     });
 
 
     socket.on('alone', (data) => {
-        console.log(data.warning.message, data.warning.title);
+        console.log("OTHER USER DISCONNECTED SO ESTABLISH A NEW CONNECTION");
     });
 })();
