@@ -50,5 +50,11 @@ let remoteStream;
 
     socket.on('alone', (data) => {
         console.log("OTHER USER DISCONNECTED SO ESTABLISH A NEW CONNECTION");
+        toastr.options = {
+            "positionClass": "toast-top-center",
+            "hideDuration": 300,
+            "timeOut": 4000
+        };
+        toastr.warning(data.warning.title,data.warning.message);
     });
 })();

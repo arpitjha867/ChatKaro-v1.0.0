@@ -89,18 +89,22 @@ io.on("connection",(socket)=>{
     asyncCall()
 
     socket.on('disconnect', () => {
-        let index = onlineUsers.indexOf(socket);
-        onlineUsers.splice(index,1);
-        index = rooms.findIndex(x => x.roomID == windowID.roomID);
-        if(index >= 0){
-          if(rooms[index].isFilled == true){
-            let warning = { "title": "Stranger is disconnected!", "message": "Please click on 'New' button to connect to someone else." };
-            io.sockets.in(windowID.roomID).emit('alone', { "warning": warning, "roomID": windowID.roomID });
-            rooms.splice(index,1);
-          }
-          else{
-            rooms.splice(index,1);
-          }
+      console.log("USER DISCONNECTING USERID => ",socket.id);
+      let index = onlineUsers.indexOf(socket);
+      onlineUsers.splice(index,1);
+      console.log("USER REMOVED FROM onlineUsers");
+      index = rooms.findIndex(x => x.roomID == windowID.roomID);
+      if(index >= 0){
+        if(rooms[index].isFilled == true){
+          console.log("USER IS REMOVED FROM FILLED ROOM ROOMID => ",rooms[index].roomID);
+          let warning = { "title": "Stranger is disconnected!", "message": "Please click on 'New' button to connect to someone else." };
+          io.sockets.in(windowID.roomID).emit('alone', { "warning": warning, "roomID": windowID.roomID });
+          rooms.splice(index,1);
         }
+        else{
+          console.log("USER IS REMOVED FROM UN-FILLED ROOM ROOMID => ",rooms[index].roomID);
+          rooms.splice(index,1);
+        }
+      }
     });
 })
