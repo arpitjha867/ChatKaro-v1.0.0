@@ -5,7 +5,7 @@ import routes from "./Routes/router.js"
 import bodyparser from 'body-parser'
 import {Server}  from 'socket.io';
 import uniqueID from 'uniqid';
-import { Socket } from "dgram";
+import moment from "moment";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -91,6 +91,11 @@ io.on("connection",(socket)=>{
     socket.on('typing', (data) => {
       io.sockets.in(data.room).emit('addTyping', { "senderId": windowID.id, "typingStatus": data.typingStatus });
     });
+
+    socket.on("sendMessage",(data)=>{
+      const timestamp = moment().format('LT')
+      io.sockets.in(data.room).emit('newMessage',{"message":data,"senderId":windowID.id,"timestamp":timestamp})
+    })
 
     socket.on('disconnect', () => {
       console.log("USER DISCONNECTING USERID => ",socket.id);
