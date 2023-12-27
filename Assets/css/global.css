@@ -9,3 +9,13 @@
   flex-direction: column;
   min-height: 100vh; */
 }
+
+body {
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--background-color);
+  display: flex;
+  /* align-items: center;
+  justify-content: center; */
+  height: 100vh;
+  margin: 0;
+}

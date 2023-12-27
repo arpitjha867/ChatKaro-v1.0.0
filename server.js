@@ -88,6 +88,10 @@ io.on("connection",(socket)=>{
     }
     asyncCall()
 
+    socket.on('typing', (data) => {
+      io.sockets.in(data.room).emit('addTyping', { "senderId": windowID.id, "typingStatus": data.typingStatus });
+    });
+
     socket.on('disconnect', () => {
       console.log("USER DISCONNECTING USERID => ",socket.id);
       let index = onlineUsers.indexOf(socket);

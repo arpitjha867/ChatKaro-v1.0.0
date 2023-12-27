@@ -14,6 +14,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <title>ChatKaro-Text-chat</title>
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
 
 </head>
 <body class="d-flex flex-column min-vh-100 justify-content-between ">
@@ -38,23 +40,22 @@
         </div>
     </nav>
     <!-- content -->
-    <div class="main-container">
-      <div class="chat-text-container">
-          <p>chat are shown here</p>
-          <hr>
-          <p class="chat-text-area"></p>
+    <div class="container_msg">
+      <div class="header">
+        <img src="https://cdn-icons-png.flaticon.com/512/1933/1933087.png?ga=GA1.1.1619274011.1703495556&" alt="img" class="avatar">
+        <h3>Stranger</h3>
+        <i class="fa-solid fa-phone"></i>
+        <i class="fa-solid fa-video"></i>
+        <i class="fa-solid fa-ellipsis-vertical"></i>
       </div>
-      <div class="next-chat-container">
-          <div class="next-chat">
-              Next
-          </div>
-          <div class="type-message">
-              <textarea placeholder="Type a message..." name="" id="msg-input" cols="30" rows="5"></textarea>
-          </div>
-          <div class="msg-send-button">Send</div>
-
+      <div id="chat_container" class="chat">
       </div>
-  </div>
+      <div class="lower-options-panel">
+        <button id="end_btn" class="btn">End<i class="fa-solid  mx-2 fa-circle-xmark"></i></button>
+        <input type="text" name="message_box" id="message_box" class="message-input-box">
+        <button id="send_btn" class="btn">Send<i class="fa-solid mx-2  fa-paper-plane"></i></button>
+      </div>
+    </div>
     <!-- footer -->
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-2 border-top">
         <div class="col-md-4 d-flex align-items-center">
@@ -73,6 +74,7 @@
         </ul>
       </footer>
       <!-- scripts -->
+      <script src="js/text_chat.js"></script>
       <script src="js/index.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>
