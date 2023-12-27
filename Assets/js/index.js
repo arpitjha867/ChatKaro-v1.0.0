@@ -79,28 +79,35 @@
     let stop;
     socket.on('addTyping', (data) => {
         // let msgs = document.querySelector("#msgs");
-        // let typeMessage = document.querySelector('#typing');
+        let typeMessage = document.querySelector('#check_exist');
         if (socket.id != data.senderId) {
         if (data.typingStatus === true) {
             if (typeMessageShown === false) {
                 console.log("helo")
                 const typingMsg = document.createElement("div");
                 typingMsg.classList.add("message", "joke");
-                typingMsg.innerHTML = `Stranger is typing...`;
+                typingMsg.setAttribute("id", "check_exist");
+                typingMsg.innerHTML = `
+                <div class="typing">
+                  <div class="dot"></div>
+                  <div class="dot"></div>
+                  <div class="dot"></div>
+                </div>
+                `;
                 chatContainer.append(typingMsg);
                 typeMessageShown = true;
             }
             else {
                 window.clearTimeout(stop);
             }
-            // typeMessage = document.querySelector('#typing');
+            let typeMessage = document.querySelector('#check_exist');
             stop = window.setTimeout(function() {
-            // typeMessage.remove();
-            typeMessageShown = false;
+                typeMessage.remove();
+                typeMessageShown = false;
             }, 2000);
         }
         else if (typeMessage) {
-            // typeMessage.remove();
+            typeMessage.remove();
             typeMessageShown = false;
         }
         }
