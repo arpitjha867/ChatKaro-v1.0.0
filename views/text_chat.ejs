@@ -32,16 +32,6 @@
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>
-            </ul>
-          </div>
         </div>
     </nav>
     <!-- content -->
@@ -56,9 +46,9 @@
       <div id="chat_container" class="chat">
       </div>
       <div class="lower-options-panel">
-        <button id="end_btn" class="btn">End<i class="fa-solid  mx-2 fa-circle-xmark"></i></button>
-        <input type="text" name="message_box" id="message_box" class="message-input-box">
-        <button id="send_btn" class="btn">Send<i class="fa-solid mx-2  fa-paper-plane"></i></button>
+        <button id="end_btn" disabled class="btn btn-primary m-2">End<i class="fa-solid  mx-2 fa-circle-xmark"></i></button>
+        <input type="text" name="message_box" id="message_box" class="message-input-box" placeholder="Enter you message...">
+        <button id="send_btn" disabled class="btn btn-success m-2">Send<i class="fa-solid mx-2  fa-paper-plane"></i></button>
       </div>
     </div>
     <!-- footer -->
@@ -67,7 +57,7 @@
           <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
             <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
           </a>
-          <span class="text-muted">© 2023 Chatkaro, Inc</span>
+          <span class="text-muted">© 2024 Chatkaro, Inc</span>
         </div>
   
         <h2>ChatKaro</h2>

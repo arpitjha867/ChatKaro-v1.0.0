@@ -14,13 +14,11 @@ body {
   font-family: "Montserrat", sans-serif;
   background-color: var(--background-color);
   display: flex;
-  /* align-items: center;
-  justify-content: center; */
   height: 100vh;
   margin: 0;
 }
 
-.lower-options-panel{
+.lower-options-panel {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -34,9 +32,15 @@ body {
   border-radius: 30px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.1);
   height: auto; /* Change to auto to allow content to determine height */
-  max-width: 600px; /* Set maximum width */
+  /* max-width: 600px; */
+  width: auto;
   margin: 20px auto; /* Center the container with margin:auto */
   overflow: hidden; /* Hide overflow */
+}
+
+.message-input-box {
+  padding: 6px;
+  border-radius: 10px;
 }
 
 .container_msg p {
@@ -77,56 +81,27 @@ body {
 
 .message {
   font-size: 16px;
-  line-height: 25px;
   width: fit-content;
   max-width: 450px;
   margin: 20px 10px;
-  padding: 20px;
+  padding: 13px;
   border-radius: 30px;
+  word-wrap: break-word; /* Allow long words to break into multiple lines */
+  white-space: pre-line; /* Preserve line breaks in the content */
 }
 
 .message.joke {
   background-color: var(--accent-color);
   color: #fff;
   border-top-left-radius: 0px;
-  padding-left: 30px;
+  padding-left: 12px;
 }
 
 .message.response {
   background-color: #eee;
   border-top-right-radius: 0px;
   margin-left: auto;
-  padding-right: 30px;
-}
-
-.btn {
-  display: flex;
-  background-color: #eee;
-  color: var(--accent-color);
-  font-family: inherit;
-  border: 0;
-  border-radius: 50px;
-  padding: 14px 40px;
-  margin: 20px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: scale 0.2s ease;
-}
-
-.btn i {
-  margin-left: auto;
-}
-
-.btn:focus {
-  outline: none;
-}
-
-.btn:hover {
-  scale: 1.01;
-}
-
-.btn:active {
-  scale: 0.99;
+  padding-right: 12px;
 }
 
 /*=============== SCROLLBAR ===============*/
@@ -154,7 +129,7 @@ body {
 }
 .typing .dot {
   animation: mercuryTypingAnimation 1.8s infinite ease-in-out;
-  background-color: #6CAD96 ;
+  background-color: #6cad96;
   border-radius: 50%;
   height: 7px;
   margin-right: 4px;
@@ -178,14 +153,60 @@ body {
 @keyframes mercuryTypingAnimation {
   0% {
     transform: translateY(0px);
-    background-color:#EADCB8; 
+    background-color: #eadcb8;
   }
   28% {
     transform: translateY(-7px);
-    background-color:#F1E4CC; 
+    background-color: #f1e4cc;
   }
   44% {
     transform: translateY(0px);
-    background-color: #D8C9A3;
+    background-color: #d8c9a3;
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+  .container_msg {
+    margin: 10px;
+  }
+
+  .header {
+    margin: 10px;
+  }
+
+  .message {
+    max-width: 100%;
+  }
+
+  .lower-options-panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .message-input-box {
+    width: 100%;
+  }
+  /* Adjusted styles for smaller screens */
+  .button-group {
+    display: flex;
+    gap: 10px;
+  }
+
+  /* Responsive styles for the footer */
+  footer {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav.col-md-4 {
+    margin-top: 10px; /* Add space between sections on mobile */
+    text-align: center;
+  }
+  /* Set chat container height to 100% on mobile screens */
+  .chat {
+    height: 100%;
+    min-height: 200px;
   }
 }

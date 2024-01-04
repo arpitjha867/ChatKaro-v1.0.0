@@ -35,10 +35,8 @@ var rooms = [];
 var queue = [];
 
 io.on("connection",(socket)=>{
-    console.log("****************NEW CONNECTION******************")
     let windowID = socket;
     socket.emit('wait', { "message": "Please wait...connecting you to stranger!"});
-    console.log("USER CONNECTED TO CONNECTION AND 'wait' EVENT IS SENT USERID => ",socket.id)
     availableUsers.push(socket);
     let resolveAfter5Seconds = () => {
       return new Promise(resolve => {
@@ -47,16 +45,13 @@ io.on("connection",(socket)=>{
         }, 5000);
       });
     }
-    console.log("USER ADDED TO 'availableUsers' LIST");
     async function asyncCall(){
         let result = await resolveAfter5Seconds();
         let selected = Math.floor(Math.random()*availableUsers.length);
         socket = availableUsers[selected];
-        console.log("RANDOMLY SELECTING USER FROM 'availableUsers' LIST USER SELECTED => ",socket.id);
         availableUsers.splice(selected,1);
         socket.emit('ack', { id: socket.id, msg: "User connected" });
         onlineUsers.push(socket);
-        console.log("SELECTED USER IS ADDED TO 'onlineUsers' LIST 'ack' EVENT IS SENT ")
         socket.on('privateRoom', (user) => {
             let unfilledRooms = rooms.filter((room) => {
               if (!room.isFilled) {
@@ -64,7 +59,6 @@ io.on("connection",(socket)=>{
               }
             });
             try {
-              console.log("CHECKING IF ROOM EXIST");
               socket.join(unfilledRooms[0].roomID);
               let index = rooms.indexOf(unfilledRooms[0]);
               rooms[index].isFilled = true;
@@ -72,18 +66,14 @@ io.on("connection",(socket)=>{
               socket.emit('private ack', { "message": "Added to privateRoom", "roomID": unfilledRooms[0].roomID });
               socket.roomID = unfilledRooms[0].roomID;
               io.sockets.in(socket.roomID).emit('toast', { "message": "You are connected with a stranger!"});
-              console.log("USER CONNECTED TO EXISTING ROOM 'private ack' EVENT SENT : ROOMID => ",socket.roomID);
             }
             catch(e) {
-              console.log("CREATING A NEW ROOM");
               let uID = uniqueID();
               rooms.push({ "roomID": uID, "isFilled": false });
               socket.join(uID);
               socket.roomID = uID;
               socket.emit('private ack', { "message": "Added to privateRoom", "roomID": uID });
-              console.log("ROOM CREATED  'private ack' EVENT SENT : ROOMID => ",uID);
             }
-            console.log("ALL ROOMS => ",rooms);
           });
     }
     asyncCall()
@@ -98,20 +88,16 @@ io.on("connection",(socket)=>{
     })
 
     socket.on('disconnect', () => {
-      console.log("USER DISCONNECTING USERID => ",socket.id);
       let index = onlineUsers.indexOf(socket);
       onlineUsers.splice(index,1);
-      console.log("USER REMOVED FROM onlineUsers");
       index = rooms.findIndex(x => x.roomID == windowID.roomID);
       if(index >= 0){
         if(rooms[index].isFilled == true){
-          console.log("USER IS REMOVED FROM FILLED ROOM ROOMID => ",rooms[index].roomID);
           let warning = { "title": "Stranger is disconnected!", "message": "Please click on 'New' button to connect to someone else." };
           io.sockets.in(windowID.roomID).emit('alone', { "warning": warning, "roomID": windowID.roomID });
           rooms.splice(index,1);
         }
         else{
-          console.log("USER IS REMOVED FROM UN-FILLED ROOM ROOMID => ",rooms[index].roomID);
           rooms.splice(index,1);
         }
       }

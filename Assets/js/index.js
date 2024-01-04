@@ -1,7 +1,6 @@
 (function(){
     let socket = io.connect(`${window.location.hostname}:${window.location.port}`);
     let autolinker = new Autolinker({ newWindow: false, stripPrefix: false });
-    console.log("'index.js' FILE IS LOADED CONNECTION TO SOCKET.IO SENT SOCKET OBJECT => ",socket)
     let room_id_of_other_user = ' ';
 
     // lets access all of the required dom elemets
@@ -23,18 +22,18 @@
     };
 
     socket.on('toast', (data) => {
-        console.log("CONNECTED TO ROOM");
         toastr.remove();
         toastr.options = {
           "positionClass": "toast-top-center",
           "hideDuration": 300,
           "timeOut": 4000
         };
+        sendBtn.removeAttr('disabled');
+        endBtn.removeAttr('disabled');
         toastr.success(data.message);
     });
     
     socket.on('wait', (data) => {
-        console.log("CREATE ROOM OR CONNECT TO EXISTING ROOM");
         toastr.options = {
             "positionClass": "toast-top-center",
             "hideDuration": 300,
@@ -46,12 +45,10 @@
 
     socket.on('private ack', (data) => {
         room_id_of_other_user = data.roomID;
-        console.log("USER IS CONNECTED TO EXISTING ROOM OR CREATED A NEW ROOM ROOMID => ",room_id_of_other_user);
     });
 
     //User disconnected notification
     socket.on('alone', (data) => {
-        console.log("OTHER USER DISCONNECTED SO ESTABLISH A NEW CONNECTION");
         toastr.options = {
             "positionClass": "toast-top-center",
             "hideDuration": 300,
@@ -150,7 +147,10 @@
             Msg.innerHTML = `${decryptedMessage}`
         }
         chatContainer.append(Msg);
-        let height = chatContainer.height();
-        window.scroll(0, height);
+        // let height = chatContainer.height();
+        // window.scroll(0, height);
+        chatContainer.animate({
+            scrollTop: chatContainer[0].scrollHeight
+        }, 500); 
     })
 })();
