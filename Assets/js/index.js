@@ -31,6 +31,8 @@
           "timeOut": 4000
         };
         toastr.success(data.message);
+        sendBtn.removeAttr('disabled');
+        endBtn.removeAttr('disabled');
     });
     
     socket.on('wait', (data) => {
